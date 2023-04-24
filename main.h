@@ -13,6 +13,29 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+
+/**
+ * Macros Length Modifiers
+ */
+#define SHORT 1
+#define LONG 2
+
+
+/**
+ * Macros Flag Modifiers
+ */
+#define PLUS 1
+#define SPACE 2
+#define HASH 4
+#define ZERO 8
+#define NEG 16
+#define PLUS_FLAG (flags & 1)
+#define SPACE_FLAG ((flags >> 1) & 1)
+#define HASH_FLAG ((flags >> 2) & 1)
+#define ZERO_FLAG ((flags >> 3) & 1)
+#define NEG_FLAG ((flags >> 4) & 1)
+
+
 /**
  * struct _flag - Defining a flags struct.
  * @flag: A character representing a flag.
@@ -74,7 +97,36 @@ unsigned int convert_r(va_list args, buffer_n *output, unsigned char flags, char
 unsigned int convert_R(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
 
 
+/**
+ * Handlers
+ * flag_handler - to handle flags
+ * len_handler - to handle length of modifier
+ * wid_handler - to handle width of modifiers
+ * pre_handler - precision handler
+ * spec_handler - specifier handler
+ */
+unsigned char flag_handler(const char *flags);
+unsigned char len_handler(const char *modifier);
+char wid_handler(va_list args, const char *modifier, char *index);
+char pre_handler(va_list args, const char *modifier, char *index);
+unsigned int (*spec_handler(const char *specifier))(va_list, buffer_n *, unsigned char, char, char, unsigned char);
 
 
 
-#endif
+
+
+
+/**
+ * Additional Functions
+ */
+buffer_n *init_buffer(void);
+void free_buffer(buffer_n *output);
+unsigned int _memcpy(buffer_n *output, const char *src, unsigned int n);
+unsigned int convert_sbase(buffer_n *output, long int num, char *base, unsigned char flags, char wid, char prec);
+unsigned int convert_ubase(buffer_n *output, unsigned long int num, char *base, unsigned char flags, char wid, char prec);
+
+
+
+
+
+#endif /*MAIN_H*/
