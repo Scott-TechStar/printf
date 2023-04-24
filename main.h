@@ -82,19 +82,19 @@ int _putchar(char c);
  * Conversion Specifier Functions.
 */
 
-unsigned int convert_c(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_s(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_di(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_per(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_b(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_u(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_o(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_x(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_X(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_S(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_p(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_r(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_R(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_chr(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_arg(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_cent(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_bin(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_dec(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_oct(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_int(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_Int(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_Str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int convert_add(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int reverse_str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+unsigned int str_ROT13(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
 
 
 /**
