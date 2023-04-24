@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 /**
- * struct _flag - D4efining a flags struct.
+ * struct _flag - Defining a flags struct.
  * @flag: A character representing a flag.
  * @value: The integer value of the flag.
  */
@@ -53,6 +53,7 @@ unsigned int (*func)(va_list, buffer_n *,unsigned char, char, char, unsigned cha
  * Funtion Prototypes
  */
 int _printf(const char *format, ...);
+int _putchar(char c);
 
 /**
  * Conversion Specifier Functions.
