@@ -155,7 +155,7 @@ return (ret);
  *
  * Return: The number of bytes stored to the buffer.
  */
-unsigned int convert_dec(va_list args, buffer_t *output, unsigned char flags, char wid, char prec, unsigned char len)
+unsigned int convert_dec(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len)
 {
 unsigned long int num;
 unsigned int ret = 0;
@@ -243,7 +243,7 @@ return (ret);
  *
  * Return: The number of bytes stored to the buffer.
  */
-unsigned int convert_Int(va_list args, buffer_t *output, unsigned char flags, char wid, char prec, unsigned char len)
+unsigned int convert_Int(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len)
 {
 unsigned long int num;
 unsigned int ret = 0;
