@@ -1,3 +1,6 @@
+#include "main.h"
+#include "stdarg.h"
+
 /**
  * flag_handler - Maches a flag with its corresponding value.
  * @flag: A pointer to the potential flag.
