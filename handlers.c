@@ -117,7 +117,7 @@ if (*modifier == '0')
 }
 return (0);
 }
-while ((*modofier > '0' && *modifier <= '9') || (*modifier == '0'))
+while ((*modifier > '0' && *modifier <= '9') || (*modifier == '0'))
 {
 (*index)++;
 if (*modifier == '*')
