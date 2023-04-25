@@ -141,3 +141,42 @@ char pre_handler(va_list args, const char *modifier, char *index)
 
 	return (value);
 }
+
+/**
+ * spec_handler - Matches a conversion specifier
+ *		  with a corresponding conversion function
+ * @specifier: A pointer to a potential conversion specifier.
+ *
+ * Return: If a conversion function is matched - a pointer to the function.
+ *	   Otherwise - NULL.
+ */
+
+unsigned int (*spec_handler(const char *specifier))(va_list, buffer_n * unsigned char, char, char, unsigned char)
+{
+		int i;
+		converter_n converters[] = {
+		{'c', convert_chr},
+		{'s', convert_str},
+		{'d', convert_arg},
+		{'i', convert_arg},
+		{'%', convert_cent},
+		{'b', convert_bi},
+		{'u', convert_dec},
+		{'o', convert_oct},
+		{'x', convert_int},
+		{'X', convert_Int},
+		{'S', convert_Str},
+		{'p', convert_add},
+		{'r', reverse_str},
+		{'R', str_ROT13},
+		{0, NULL}
+	};
+
+	for (i = 0; converters[i].func; i++)
+	{
+		if (converters[i].specifier == *specifier)
+			return (converters[i].func);
+	}
+
+	return (NULL);
+}
