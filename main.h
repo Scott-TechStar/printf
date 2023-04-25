@@ -112,6 +112,9 @@ char pre_handler(va_list args, const char *modifier, char *index);
 unsigned int (*spec_handler(const char *specifier))(va_list, buffer_n *, unsigned char, char, char, unsigned char);
 
 
+unsigned char num_bits(unsigned char num);
+void clear_op(va_list args, buffer_n *output);
+int read_printf(const char *format, va_list args, buffer_n *output);
 
 
 
