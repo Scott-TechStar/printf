@@ -1,5 +1,6 @@
 #include "main.h"
-/**
+#include <stdarg.h>
+/*
  * convert_str - Converts an argument to a string and
  *             stores it to a buffer contained in a struct.
  * @args: A va_list pointing to the argument to be converted.

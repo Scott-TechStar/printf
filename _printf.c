@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdarg.h>
 /**
  * num_bits - Counts the number of bits set.
  *

@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdarg.h>
 /**
  * convert_arg - Converts an argument to a signed int and
  *              stores it to a buffer contained in a struct.
