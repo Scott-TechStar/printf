@@ -1,166 +1,112 @@
 #include "main.h"
-#include <unistd.h>
+
 /**
- * _memcpy - copyies n bytes from memory area src to
- *	     the buffer contained in a buffer_t struct.
- * @output: A buffer_n struct.
- * @src: A pointer to the memory area to copy.
- * @n: The number of bytes to be copied.
- *
- * Return: The number of byte copied.
+ * print_bigS - Non printable characters
+ * (0 < ASCII value < 32 or >= 127) are
+ * printed this way: \x, followed by the ASCII code
+ * value in hexadecimal (upper case - always 2 characters)
+ * @l: va_list arguments from _printf
+ * @f: pointer to the struct flags that determines
+ * if a flag is passed to _printf
+ * Return: number of char printed
  */
-
-unsigned int _memcpy(buffer_n *output, const char *src, unsigned int n)
+int print_bigS(va_list l, flags_t *f)
 {
-	unsigned int index;
+	int i, count = 0;
+	char *res;
+	char *s = va_arg(l, char *);
 
-	for (index = 0; index < n; index++)
+	(void)f;
+	if (!s)
+		return (_puts("(null)"));
+
+	for (i = 0; s[i]; i++)
 	{
-		*(output->buffer) = *(src + index);
-		(output->len)++;
-
-		if (output->len == 1024)
+		if (s[i] > 0 && (s[i] < 32 || s[i] >= 127))
 		{
-			write(1, output->start, output->len);
-			output->buffer = output->start;
-			output->len = 0;
+			_puts("\\x");
+			count += 2;
+			res = convert(s[i], 16, 0);
+			if (!res[1])
+				count += _putchar('0');
+			count += _puts(res);
 		}
 		else
-			(output->buffer)++;
-
+			count += _putchar(s[i]);
 	}
-
-	return (0);
+	return (count);
 }
 
 /**
- * free_buffer - Frees a buffer_t struct.
- * @output: The buffer_n struct to be freed.
+ * print_rev - prints a string in reverse
+ * @l: argument from _printf
+ * @f: pointer to the struct flags that determines
+ * if a flag is passed to _printf
+ * Return: length of the printed string
  */
-void free_buffer(buffer_n *output)
+int print_rev(va_list l, flags_t *f)
 {
-	free(output->start);
-	free(output);
+	int i = 0, j;
+	char *s = va_arg(l, char *);
+
+	(void)f;
+	if (!s)
+		s = "(null)";
+
+	while (s[i])
+		i++;
+
+	for (j = i - 1; j >= 0; j--)
+		_putchar(s[j]);
+
+	return (i);
 }
 
 /**
- * init_buffer - Initializes a variable of struct type buffer_n.
- *
- * Return: A pointer to the initialized buffer_n.
+ * print_rot13 - prints a string using rot13
+ * @l: list of arguments from _printf
+ * @f: pointer to the struct flags that determines
+ * if a flag is passed to _printf
+ * Return: length of the printed string
  */
-buffer_n *init_buffer(void)
+int print_rot13(va_list l, flags_t *f)
 {
-	buffer_n *output;
+	int i, j;
+	char rot13[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	char ROT13[] = "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM";
+	char *s = va_arg(l, char *);
 
-	output = malloc(sizeof(buffer_n));
-	if (output == NULL)
-		return (NULL);
-
-	output->buffer = malloc(sizeof(char) * 1024);
-	if (output->buffer == NULL)
+	(void)f;
+	for (j = 0; s[j]; j++)
 	{
-		free(output);
-		return (NULL);
-	}
-
-	output->start = output->buffer;
-	output->len = 0;
-
-	return (output);
-}
-
-/**
- * convert_sbase - Converts a signed long to an inputted base and stores
- *                the result to a buffer contained in a struct.
- * @output: A buffer_n struct containing a character array.
- * @num: A signed long to be converted.
- * @base: A pointer to a string containing the base to convert to.
- * @flags: Flag modifiers.
- * @wid: A width modifier.
- * @prec: A precision modifier.
- *
- * Return: The number of bytes stored to the buffer.
- */
-unsigned int convert_sbase(buffer_n *output, long int num, char *base,
-		unsigned char flags, char wid, char prec)
-{
-	int size;
-	char digit, pad = '0';
-	unsigned int ret = 1;
-
-	for (size = 0; *(base + size);)
-		size++;
-
-	if (num >= size || num <= -size)
-		ret += convert_sbase(output, num / size, base,
-				flags, wid - 1, prec - 1);
-
-	else
-	{
-		for (; prec > 1; prec--, wid--)
-			ret += _memcpy(output, &pad, 1);
-
-		if (NEG_FLAG == 0)
+		if (s[j] < 'A' || (s[j] > 'Z' && s[j] < 'a') || s[j] > 'z')
+			_putchar(s[j]);
+		else
 		{
-			pad = (ZERO_FLAG == 1) ? '0' : ' ';
-			for (; wid > 1; wid--)
-				ret += _memcpy(output, &pad, 1);
+			for (i = 0; i <= 52; i++)
+			{
+				if (s[j] == rot13[i])
+					_putchar(ROT13[i]);
+			}
 		}
 	}
 
-	digit = base[(num < 0 ? -1 : 1) * (num % size)];
-	_memcpy(output, &digit, 1);
-
-	return (ret);
+	return (j);
 }
 
 /**
- * convert_ubase - Converts an unsigned long to an inputted base and
- *                 stores the result to a buffer contained in a struct.
- * @output: A buffer_n struct containing a character array.
- * @num: An unsigned long to be converted.
- * @base: A pointer to a string containing the base to convert to.
- * @flags: Flag modifiers.
- * @wid: A width modifier.
- * @prec: A precision modifier.
- *
- * Return: The number of bytes stored to the buffer.
+ * print_percent - prints a percent
+ * @l: va_list arguments from _printf
+ * @f: pointer to the struct flags in which we turn the flags on
+ * Return: number of char printed
  */
-unsigned int convert_ubase(buffer_n *output, unsigned long int num, char *base,
-		unsigned char flags, char wid, char prec)
+int print_percent(va_list l, flags_t *f)
 {
-	unsigned int size, ret = 1;
-	char digit, pad = '0', *lead = "0x";
-
-	for (size = 0; *(base + size);)
-		size++;
-
-	if (num >= size)
-		ret += convert_ubase(output, num / size, base,
-				flags, wid - 1, prec - 1);
-
-	else
-	{
-		if (((flags >> 5) & 1) == 1)
-		{
-			wid -= 2;
-			prec -= 2;
-		}
-		for (; prec > 1; prec--, wid--)
-			ret += _memcpy(output, &pad, 1);
-
-		if (NEG_FLAG == 0)
-		{
-			pad = (ZERO_FLAG == 1) ? '0' : ' ';
-			for (; wid > 1; wid--)
-				ret += _memcpy(output, &pad, 1);
-		}
-		if (((flags >> 5) & 1) == 1)
-			ret += _memcpy(output, lead, 2);
-	}
-
-	digit = base[(num % size)];
-	_memcpy(output, &digit, 1);
-
-	return (ret);
+	(void)l;
+	(void)f;
+	return (_putchar('%'));
 }
+
+
+
+	
