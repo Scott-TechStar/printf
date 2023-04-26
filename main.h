@@ -14,121 +14,71 @@
 #include <unistd.h>
 
 
-/**
- * Macros Length Modifiers
- */
-#define SHORT 1
-#define LONG 2
-
-
-/**
- * Macros Flag Modifiers
- */
-#define PLUS 1
-#define SPACE 2
-#define HASH 4
-#define ZERO 8
-#define NEG 16
-#define PLUS_FLAG (flags & 1)
-#define SPACE_FLAG ((flags >> 1) & 1)
-#define HASH_FLAG ((flags >> 2) & 1)
-#define ZERO_FLAG ((flags >> 3) & 1)
-#define NEG_FLAG ((flags >> 4) & 1)
-
 
 /**
  * struct _flag - Defining a flags struct.
  * @flag: A character representing a flag.
  * @value: The integer value of the flag.
  */
-typedef struct _flag
+typedef struct flags
 {
 unsigned char flag;
 unsigned char value;
-} flag_n;
-
+} flag_t;
 /**
- * struct _buffer - Defining a buffer struct.
- * @buffer: A pointer to a character array.
- * @start: A pointer to the start of buffer.
- * @len: The length of the string stored in buffer.
+ * struct printHandler - struct to choose the right function depending
+ * on the format specifier passed to _printf()
+ * @c: format specifier
+ * @f: pointer to the correct printing function
  */
-typedef struct _buffer
+typedef struct printHandler
 {
-char *buffer;
-char *start;
-unsigned int len;
-} buffer_n;
+	char c;
+	int (*f)(va_list ap, flags_t *f);
+} ph;
 
-/**
- * struct _converter - Defining a converter struct.
- * @specifier: A character representing a conversion specifier.
- * @func: A pointer to a conversion function corresponding to specifier.
- */
-typedef struct _converter
-{
-unsigned char specifier;
-unsigned int (*func)(va_list, buffer_n *,unsigned char, char, char, unsigned char);
-} converter_n;
+/* print_nums */
+int print_int(va_list l, flags_t *f);
+void print_number(int n);
+int print_unsigned(va_list l, flags_t *f);
+int count_digit(int i);
 
+/* print_bases */
+int print_hex(va_list l, flags_t *f);
+int print_hex_big(va_list l, flags_t *f);
+int print_binary(va_list l, flags_t *f);
+int print_octal(va_list l, flags_t *f);
 
-/**
- * Funtion Prototypes
- */
+/* converter */
+char *convert(unsigned long int num, int base, int lowercase);
+
+/* _printf */
 int _printf(const char *format, ...);
+
+/* get_print */
+int (*get_print(char s))(va_list, flags_t *);
+
+/* get_flag */
+int get_flag(char s, flags_t *f);
+
+/* print_alpha */
+int print_string(va_list l, flags_t *f);
+int print_char(va_list l, flags_t *f);
+
+/* write_funcs */
 int _putchar(char c);
+int _puts(char *str);
 
-/**
- * Conversion Specifier Functions.
-*/
+/* print_custom */
+int print_rot13(va_list l, flags_t *f);
+int print_rev(va_list l, flags_t *f);
+int print_bigS(va_list l, flags_t *f);
 
-unsigned int convert_chr(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_arg(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_cent(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_bin(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_dec(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_oct(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_int(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_Int(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_Str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int convert_add(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int reverse_str(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
-unsigned int str_ROT13(va_list args, buffer_n *output, unsigned char flags, char wid, char prec, unsigned char len);
+/* print_address */
+int print_address(va_list l, flags_t *f);
 
-
-/**
- * Handlers
- * flag_handler - to handle flags
- * len_handler - to handle length of modifier
- * wid_handler - to handle width of modifiers
- * pre_handler - precision handler
- * spec_handler - specifier handler
- */
-unsigned char flag_handler(const char *flags);
-unsigned char len_handler(const char *modifier);
-char wid_handler(va_list args, const char *modifier, char *index);
-char pre_handler(va_list args, const char *modifier, char *index);
-unsigned int (*spec_handler(const char *specifier))(va_list, buffer_n *, unsigned char, char, char, unsigned char);
-
-
-unsigned char num_bits(unsigned char num);
-void clear_op(va_list args, buffer_n *output);
-int read_printf(const char *format, va_list args, buffer_n *output);
-
-
-
-
-/**
- * Additional Functions
- */
-buffer_n *init_buffer(void);
-void free_buffer(buffer_n *output);
-unsigned int _memcpy(buffer_n *output, const char *src, unsigned int n);
-unsigned int convert_sbase(buffer_n *output, long int num, char *base, unsigned char flags, char wid, char prec);
-unsigned int convert_ubase(buffer_n *output, unsigned long int num, char *base, unsigned char flags, char wid, char prec);
-
-
+/* print_percent */
+int print_percent(va_list l, flags_t *f);
 
 
 
