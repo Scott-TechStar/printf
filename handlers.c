@@ -1,173 +1,60 @@
-#include "main.h"
-#include "stdarg.h"
-/**
- * flag_handler - Maches a flag with its corresponding value.
- * @flag: A pointer to the potential flag.
- *
- * Return: If a flag character is matched - its corresponding value.
- *	   Otherwise - 0.
- */
-unsigned char flag_handler(const char *flag)
-{
-int i, j;
-unsigned char ret = 0;
-flag_n flags[] = {
-{'+', PLUS},
-{' ', SPACE}
-{'#', HASH}
-{'0', ZERO}
-{'_', NEG}
-{0, 0}
-};
-for (i = 0; flag[i]; i++)
-{
-for (j = 0; flags[j].flag != 0; j++)
-{
-if (flag[i] == flags[j].flag)
-{
-ret = flags[j].value;
-}
-else
-{
-ret |= flags[j].value;
-}
-break;
-}
-}
-if (flags[j].value == 0)
-{
-break;
-}
-return (ret);
-}
-/**
- * len_handler - Matches length modifiers with their corresponding value.
- * @modifier: A pointer to a potential lenght modifier
- *
- * Return: If a lenght modifier is matched - its corresponding value.
- *	   Otherwise - 0.
- */
-unsigned char len_handler(const char *modifier)
-{
-if (*modifier == 'h')
-{
-return (SHORT);
-}
-else if (*modifier == 'l')
-{
-return (LONG);
-}
-return (0);
-}
-/**
- * wid_handler - Matches a width modifier with its corresponding value.
- * @args: A va_list of arguments.
- * @modifier: A pointer to a potential width modifier
- * @index: An index counter of the original format string.
- *
- * Return: If a width modifier is matched - its value.
- *	   Otherwise - 0.
- */
-char wid_handler(va_list args, const char *modifier, char *index)
-{
-char value = 0;
-while ((*modifier > '0' && *modifier <= '9') || (*modifier == '*'))
-{
-(*index)++;
-if (*modifier == '*')
-{
-value = va_arg(args, int);
-if (value <= 0)
-{
-return (0);
-}
-return (value);
-}
-value *= 10;
-value += (*modifier - '0');
-modifier++;
-}
-return (value);
-}
-/**
- * pre_handler - Matches a precision modifier with
- *		 its corresponding value.
- * @args: A va_list of arguments.
- * @modifier: A pointer to a potential prxecision modifier.
- * @index: An index counter of the original format string.
- *
- * Return: If a precision modifier is matched - its value.
- *	   If the precision modifier is empty, zero, or negative - 0.
- *	   Otherwise - -1;
- */
-char pre_handler(va_list args, const char *modifier, char *index)
-{
-char value = 0;
-if (*modifier != '.')
-{
-return (-1);
-}
-modifier++;
-(*index)++;
-if ((*modifier <= '0' || *modifier > '9') && *modifier != '*')
-{
-if (*modifier == '0')
-{
-(*index)++;
-}
-return (0);
-}
-while ((*modifier > '0' && *modifier <= '9') || (*modifier == '0'))
-{
-(*index)++;
-if (*modifier == '*')
-{
-value = va_arg(args, int);
-if (value <= 0)
-{
-return (0);
-}
-return (value);
-}
-value *= 10;
-value += (*modifier - '0');
-modifier++;
-}
-return (value);
-}
-/**
- * spec_handler - Matches a conversion specifier
- *		  with a corresponding conversion function
- * @specifier: A pointer to a potential conversion specifier.
- *
- * Return: If a conversion function is matched - a pointer to the function.
- *	   Otherwise - NULL.
- */
 
-unsigned int (*spec_handler(const char *specifier))(va_list, buffer_n * unsigned char, char, char, unsigned char)
+#include "main.h"
+
+/**
+ * get_flag - turns on flags if _printf finds
+ * a flag modifier in the format string
+ * @s: character that holds the flag specifier
+ * @f: pointer to the struct flags in which we turn the flags on
+ *
+ * Return: 1 if a flag has been turned on, 0 otherwise
+ * Authors: Ehoneah Obed & Abdulhakeem Badejo
+ */
+int get_flag(char s, flags_t *f)
 {
-int i;
-converter_n converters[] = {
-{'c', convert_chr},
-{'s', convert_str},
-{'d', convert_arg},
-{'i', convert_arg},
-{'%', convert_cent},
-{'b', convert_bi},
-{'u', convert_dec},
-{'o', convert_oct},
-{'x', convert_int},
-{'X', convert_Int},
-{'S', convert_Str},
-{'p', convert_add},
-{'r', reverse_str},
-{'R', str_ROT13},
-{0, NULL}
-};
-for (i = 0; converters[i].func; i++)
+	int i = 0;
+
+	switch (s)
+	{
+		case '+':
+			f->plus = 1;
+			i = 1;
+			break;
+		case ' ':
+			f->space = 1;
+			i = 1;
+			break;
+		case '#':
+			f->hash = 1;
+			i = 1;
+			break;
+	}
+
+	return (i);
+}
+
+/**
+ * print_address - prints address of input in hexa format
+ * @l: va_list arguments from _printf
+ * @f: pointer to the struct flags that determines
+ * if a flag is passed to _printf
+ * Return: number of char printed
+ */
+int print_address(va_list l, flags_t *f)
 {
-if (converters[i].specifier == *specifier)
-return (converters[i].func);
+	char *str;
+	unsigned long int p = va_arg(l, unsigned long int);
+
+	register int count = 0;
+
+	(void)f;
+
+	if (!p)
+		return (_puts("(nil)"));
+	str = convert(p, 16, 1);
+	count += _puts("0x");
+	count += _puts(str);
+	return (count);
 }
-return (NULL);
-}
+
+
