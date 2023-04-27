@@ -38,7 +38,3 @@ int printf_exclusive_string(va_list val)
 	}
 	return (len);
 }
-
-
-
-	
