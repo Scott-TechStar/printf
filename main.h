@@ -1,13 +1,13 @@
 #ifndef MAIN_H
 #define MAIN_H
-/**
+/*
  * Project Header file
  *
+ * Description: This file contains all the necessary function protypes that
+ *		that will be inplemented in their appropriate .c files
  */
 
-/**
- * Necessary libraries
- */
+/*Necessary libraries*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
